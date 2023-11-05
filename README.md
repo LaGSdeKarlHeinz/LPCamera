@@ -16,7 +16,7 @@ The LPC architecture is embedded-oriented as it represents an attempt to develop
 
 - **Two-Way Communication:**  The LPC is controlled from the GSC
 
-- **Recording Control:** 8-hour operation with 45-minute video recording and transmission, in normal conditions
+- **Autonomy:** 8-hour operation with 45-minute video recording and transmission, in normal conditions
 
 For full details, refer to project documentation (not yet written) or contact the team.
 
