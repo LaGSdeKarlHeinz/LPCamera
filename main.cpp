@@ -18,7 +18,7 @@ extern "C" {
 }
 static void encode(AVCodecContext *enc_ctx, AVFrame *frame, AVPacket *pkt,
                    FILE *outfile)
-{
+                   {
     int ret;
 
     /* send the frame to the encoder */
