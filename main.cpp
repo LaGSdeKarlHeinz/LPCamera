@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     // VideoCapture vid_capture(0);
     Mat opencv_frame;
     /* encode 1 second of video */
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < 400; i++) {
       
         fflush(stdout);
         
@@ -198,12 +198,16 @@ int main(int argc, char **argv)
     
                 Vec3b v = opencv_frame.at<Vec3b>(y, x);
 
-                int r = v[0];
+                int r = v[2];
                 int g = v[1];
-                int b = v[2];
-                frame->data[0][y * frame->linesize[0] + x] = g;
-                frame->data[1][y/2 * frame->linesize[1] + x/2] = b;
-                frame->data[2][y/2 * frame->linesize[2] + x/2] = r;
+                int b = v[0];
+                int dfs = r + 30;
+                float grayscale = 0.299 * r + 0.587 * g + 0.114 *b;
+                float Cb = -0.1687*r - 0.3313*g  + 0.5*b + 128 ;
+                float Cr = 0.5*r - 0.4187*g - 0.0813*b+128;
+                frame->data[0][y * frame->linesize[0] + x] = grayscale;
+                frame->data[1][y/2 * frame->linesize[1] + x/2] = Cb;
+                frame->data[2][y/2 * frame->linesize[2] + x/2] = Cr;
 
                 // frame->data[0][y * frame->linesize[0] + x] = y;
                 // frame->data[1][y * frame->linesize[0] + x] = u;
