@@ -13,7 +13,7 @@ pkg_check_modules(SWSCALE		REQUIRED IMPORTED_TARGET libswscale)
 
 find_package(OpenCV REQUIRED)
 
-add_executable(camera_encoder main.cpp mat_utils.cpp)
+add_executable(camera_encoder encoder.cpp)
 
 add_executable(decoder decoder.cpp)
 

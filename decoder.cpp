@@ -58,7 +58,7 @@ static void pgm_save(unsigned char *buf, int wrap, int xsize, int ysize,
 }
  
 static void decode(AVCodecContext *dec_ctx, AVFrame *frame, AVPacket *pkt,
-                   const char *filename)
+                   const char *filename, Mat *matrix)
 {
     char buf[1024];
     int ret;
@@ -78,29 +78,28 @@ static void decode(AVCodecContext *dec_ctx, AVFrame *frame, AVPacket *pkt,
             exit(1);
         }
 
-        Mat m = Mat(frame->height,frame->width, CV_8UC1);
+        // Mat m = Mat(frame->height,frame->width, CV_8UC1);
 
-
+/*
         for (int y = 0; y < frame->height; y++) { // width 640
-                    for (int x = 0; x < frame->width; x++) { // height 360
+                    for (int x = 0; x < frame->linesize[0]; x++) { // height 360
                         
-                        int Y = frame->data[0][y * frame->linesize[0] + x];
-                        int Cb = frame->data[1][y/2 * frame->linesize[1] + x/2];
-                        int Cr = frame->data[2][y/2 * frame->linesize[2] + x/2];
+                        float Y = frame->data[0][y * frame->linesize[0] + x];
+                        float Cb = frame->data[1][y/2 * frame->linesize[1] + x/2];
+                        float Cr = frame->data[2][y/2 * frame->linesize[2] + x/2];
                         // printf("color = %d", Y);
                         int r = Y + 1.402*(Cr - 128);
                         int g = Y - 0.34414*(Cb-128) - 0.71414*(Cr - 128);
                         int b = Y + 1.772*(Cb - 128);
-                        Vec3b v = Vec3b(r,g,b);
+                        Vec3b v = Vec3b(b,g,r);
                         // printf("x = %d", x);
                         //printf("y = %d", y);
-                        m.at<Vec3b>(y, x) = v;
+                        matrix->at<Vec3b>(y, x) = v;
                 }
-        }
-        
-        // frame2mat(frame, &m);
-        // imshow("Frame", m);
-
+        } */
+        frame2mat(frame, matrix);
+        imshow("Frame", *matrix);
+        waitKey(20);
         printf("saving frame %3"PRId64"\n", dec_ctx->frame_num);
         fflush(stdout);
         
@@ -110,8 +109,6 @@ static void decode(AVCodecContext *dec_ctx, AVFrame *frame, AVPacket *pkt,
 
    
     
-        pgm_save(frame->data[0], frame->linesize[0],
-                 frame->width, frame->height, buf);
     }
    
 }
@@ -130,6 +127,9 @@ int main(int argc, char **argv)
     int ret;
     int eof;
     AVPacket *pkt;
+
+
+    Mat m = Mat(360,640, CV_8UC3);
  
 
     filename    = "output.avi";
@@ -206,14 +206,14 @@ int main(int argc, char **argv)
             data_size -= ret;
  
             if (pkt->size)
-                decode(c, frame, pkt, outfilename);
+                decode(c, frame, pkt, outfilename, &m);
             else if (eof)
                 break;
         }
     } while (!eof);
  
     /* flush the decoder */
-    decode(c, frame, NULL, outfilename);
+    decode(c, frame, NULL, outfilename, &m);
  
     fclose(f);
  
