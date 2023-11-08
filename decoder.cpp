@@ -50,6 +50,7 @@ static void pgm_save(unsigned char *buf, int wrap, int xsize, int ysize,
     int i;
  
     f = fopen(filename,"wb");
+    
     fprintf(f, "P5\n%d %d\n%d\n", xsize, ysize, 255);
     for (i = 0; i < ysize; i++)
         fwrite(buf + i * wrap, 1, xsize, f);
@@ -76,24 +77,43 @@ static void decode(AVCodecContext *dec_ctx, AVFrame *frame, AVPacket *pkt,
             fprintf(stderr, "Error during decoding\n");
             exit(1);
         }
- 
-        Mat m = frame2mat(frame);
 
-        imshow("Frame", m);
-    
+        Mat m = Mat(frame->height,frame->width, CV_8UC1);
+
+
+        for (int y = 0; y < frame->height; y++) { // width 640
+                    for (int x = 0; x < frame->width; x++) { // height 360
+                        
+                        int Y = frame->data[0][y * frame->linesize[0] + x];
+                        int Cb = frame->data[1][y/2 * frame->linesize[1] + x/2];
+                        int Cr = frame->data[2][y/2 * frame->linesize[2] + x/2];
+                        // printf("color = %d", Y);
+                        int r = Y + 1.402*(Cr - 128);
+                        int g = Y - 0.34414*(Cb-128) - 0.71414*(Cr - 128);
+                        int b = Y + 1.772*(Cb - 128);
+                        Vec3b v = Vec3b(r,g,b);
+                        // printf("x = %d", x);
+                        //printf("y = %d", y);
+                        m.at<Vec3b>(y, x) = v;
+                }
+        }
+        
+        // frame2mat(frame, &m);
+        // imshow("Frame", m);
+
         printf("saving frame %3"PRId64"\n", dec_ctx->frame_num);
         fflush(stdout);
-        printf("here we are");
         
         /* the picture is allocated by the decoder. no need to
            free it */
         snprintf(buf, sizeof(buf), "%s-%"PRId64, filename, dec_ctx->frame_num);
 
-        
+   
     
         pgm_save(frame->data[0], frame->linesize[0],
                  frame->width, frame->height, buf);
     }
+   
 }
  
 int main(int argc, char **argv)

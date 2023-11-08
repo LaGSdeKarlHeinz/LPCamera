@@ -157,42 +157,13 @@ int main(int argc, char **argv)
             exit(1);
 
 
-
-
-
-
-            // Allocate memory for the RGB image
-    uint8_t* rgbData = new uint8_t[640 * 360 * 3]; // 3 bytes per pixel (RGB)
-
-   
-        
-
-
-        /* Prepare a dummy image.
-           In real code, this is where you would have your own logic for
-           filling the frame. FFmpeg does not care what you put in the
-           frame.
-         */
-        /* Y */
-      /*
-        vid_capture.read(opencv_frame);
-        for (y = 0; y < c->height; y++) {
-            for (x = 0; x < c->width; x++) {
-                frame->data[y][x] = opencv_frame.data[c->height * y + x];
-            }
-        }
-*/
         vid_capture.read(opencv_frame); 
-        Mat newframe;
-        cvtColor(opencv_frame, newframe, COLOR_BGR2YUV_I420, 0);
-        // waitKey(20);
-        uint8_t* pixelPtr = (uint8_t*)opencv_frame.data;
         int cn = opencv_frame.channels();
         // imshow("Frame", opencv_frame);
         
 
 
-
+            
         for (y = 0; y < 360; y++) { // width 640
             for (x = 0; x < 640; x++) { // height 360  
     
@@ -218,21 +189,6 @@ int main(int argc, char **argv)
         }
         // printf("finished image\n");
         // TODO here frame -> data request YUV420 pixel format, not RGB reduce it to this type
-
-
-
-
-
-
-
-        /* Cb and Cr */
-        for (y = 0; y < c->height/2; y++) {
-            for (x = 0; x < c->width/2; x++) {
-                //frame->data[1][y * frame->linesize[1] + x] = 128 + y + i * 2;
-                // frame->data[2][y * frame->linesize[2] + x] = 64 + x + i * 5;
-            }
-        }
-
     
         frame->pts = i;
 
