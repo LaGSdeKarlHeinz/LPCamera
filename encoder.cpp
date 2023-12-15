@@ -181,12 +181,6 @@ int main(int argc, char **argv)
                 frame->data[0][y * frame->linesize[0] + x] = grayscale;
                 frame->data[1][y/2 * frame->linesize[1] + x/2] = Cb;
                 frame->data[2][y/2 * frame->linesize[2] + x/2] = Cr;
-
-                // frame->data[0][y * frame->linesize[0] + x] = y;
-                // frame->data[1][y * frame->linesize[0] + x] = u;
-                // frame->data[2][y * frame->linesize[2] + x] = v_d;
-                // frame->data[1][y * frame->linesize[1] + x] = pixelPtr[x*opencv_frame.cols*cn + y*cn + 1];
-                // frame->data[2][y * frame->linesize[2] + x] = pixelPtr[x*opencv_frame.cols*cn + y*cn + 2];
             }
         }
         // printf("finished image\n");

@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.19)
 project(stream_tools)
 set(CMAKE_CXX_STANDARD 17)
 
+if(NOT LINUX)
+     message(FATAL_ERROR "Vaut mieux FF fast, impossible d'arriver à installer ces librairies sur autre chose que linux")  
+endif()
+    
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(AVCODEC		REQUIRED IMPORTED_TARGET libavcodec)
 pkg_check_modules(AVFORMAT		REQUIRED IMPORTED_TARGET libavformat)
