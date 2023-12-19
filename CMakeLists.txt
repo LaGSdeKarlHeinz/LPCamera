@@ -15,7 +15,21 @@ pkg_check_modules(AVUTIL		REQUIRED IMPORTED_TARGET libavutil)
 pkg_check_modules(SWRESAMPLE		REQUIRED IMPORTED_TARGET libswresample)
 pkg_check_modules(SWSCALE		REQUIRED IMPORTED_TARGET libswscale)
 
+set(BOOST_ENABLE_CMAKE ON)
+
+include(FetchContent)
+FetchContent_Declare(
+  Boost
+  GIT_REPOSITORY https://github.com/boostorg/boost.git
+  GIT_PROGRESS TRUE
+  GIT_TAG boost-1.82.0
+)
+FetchContent_MakeAvailable(Boost)
+
+
 find_package(OpenCV REQUIRED)
+# find_package(Boost 1.40.0 REQUIRED COMPONENTS asio)
+
 
 add_executable(camera_encoder encoder.cpp)
 
@@ -29,8 +43,14 @@ target_link_libraries(decoder
     PkgConfig::AVDEVICE
     PkgConfig::SWRESAMPLE
     PkgConfig::SWSCALE
+    Boost::asio
+    Boost::filesystem
+    Boost::thread
+    Boost::program_options
     ${OpenCV_LIBS}
 )
+
+
 
 
 target_link_libraries(camera_encoder 
@@ -41,5 +61,9 @@ target_link_libraries(camera_encoder
     PkgConfig::AVDEVICE
     PkgConfig::SWRESAMPLE
     PkgConfig::SWSCALE
+    Boost::asio
+    Boost::filesystem
+    Boost::thread
+    Boost::program_options
     ${OpenCV_LIBS}
 )

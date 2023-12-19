@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include<opencv2/opencv.hpp>
-#include<iostream>
- 
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+
 // Namespace to nullify use of cv::function(); syntax
 using namespace std;
 using namespace cv;
@@ -64,6 +65,9 @@ int main(int argc, char **argv)
     filename = "output.avi";
     codec_name = "libx265";
 
+
+
+
     /* find the mpeg1video encoder */
     codec = avcodec_find_encoder_by_name(codec_name);
     if (!codec) {
@@ -100,10 +104,10 @@ int main(int argc, char **argv)
     c->max_b_frames = 1;
     c->pix_fmt = AV_PIX_FMT_YUV420P;
 
-    if (codec->id == AV_CODEC_ID_H265)
+    if (codec->id == AV_CODEC_ID_H265) // AV_CODEC_ID_H265
 
         av_opt_set(c->priv_data, "preset", "fast", 0);
-        av_opt_set(c->priv_data, "crf", "23", 0);
+        av_opt_set(c->priv_data, "crf", "28", 0);
 
     /* open it */
     ret = avcodec_open2(c, codec, NULL);

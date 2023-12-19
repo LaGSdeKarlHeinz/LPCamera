@@ -31,6 +31,9 @@
 *.out
 *.app
 
+/boost_1_82_0
+/CMakeFiles
 /build
+/.vscode
 *.mp4
 *.avi*
